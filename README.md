@@ -1,0 +1,2 @@
+# bs-mapdown-assistant
+BeatSaverからOneClickでダウンロードする時にModAssistantの間に入り込んで指定プレイリストの末尾に追加する
