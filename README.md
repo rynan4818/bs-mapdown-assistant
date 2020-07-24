@@ -37,7 +37,7 @@ bs-mapdown-assistant はプログラム本体と各種ライブラリから構�
 bs-mapdown-assistant のソースコード及び各種ドキュメントについての著作権は作者であるリュナン(Twitter [@rynan4818](https://twitter.com/rynan4818))が有します。
 ライセンスは MIT ライセンスを適用します。
 
-それ以外のbs_movie_cut.exe に内包しているrubyスクリプトやバイナリライブラリ、同梱のSQLite3のDLLやffmpegの実行ファイルは、それぞれの作者に著作権があります。配布ライセンスは、それぞれ異なるため詳細は下記の入手元を確認して下さい。
+それ以外のbs-mapdown-assistant.exe に内包しているrubyスクリプトやバイナリライブラリは、それぞれの作者に著作権があります。配布ライセンスは、それぞれ異なるため詳細は下記の入手元を確認して下さい。
 
 # 開発環境、各種ライブラリ入手先
 
@@ -72,3 +72,10 @@ bs-mapdown-assistant.exe に内包している具体的なライブラリファ�
 - https://rubygems.org/gems/json/versions/1.4.6-x86-mswin32
 - 開発者:Florian Frank
 - ライセンス：Ruby Licence
+
+### DLL
+
+#### libiconv 1.11  (iconv.dll)       #Exerbでbs_movie_cut.exeに内包
+- https://www.gnu.org/software/libiconv/
+- Copyright (C) 1998, 2019 Free Software Foundation, Inc.
+- ライセンス：LGPL
