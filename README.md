@@ -13,17 +13,15 @@ BeatSaverからOneClickでダウンロードする時にModAssistantの間に入
 2. zipを適当なフォルダに解凍します。例：C:\TOOL\bs-mapdown-assistant\
 **※注意　Program Files や Program Files (x86) 以下のフォルダにインストールしないで下さい。**
 
-3. レジストリエディタを開いて `HKEY_CLASSES_ROOT\beatsaver\shell\open\command` に登録されている `ModAssistant.exe` の起動パスをコピーします。
-
-4. `bs-mapdown-assistant.rb` をテキストエディタで開いて 19行目の `MOD_ASSISTANT` の定数を 3. でコピーした ModAssistant.exe の起動パスに変更します。
-また、18行目の `PLAYLIST_FILE` の定数を自動追加するプレイリストのパスに変更します。**この時にパスの`\`マークは`\\`と記載して下さい**
+3. `bs-mapdown-setting.exe` を実行して、`PlayList` に追加対象のプレイリストを選択し、`ModAssistant PATH` にOPEN ボタンからModAssistantの実行ファイルを選択して下さい。
 
 ![imange](https://rynan4818.github.io/bs-mapdown-assistant_constant.png)
 
-5. レジストリエディタに戻って、ModAssistant.exe の起動パスを 2.でインストールした `bs-mapdown-assistant.exe` のパスに変更します。
-この時に` "--install" "%1"` の部分は残しておいて下さい。
+5. レジストリエディタを起動して、エディタのアドレスバーに `Registory setting`の`PATH`をコピーして貼り付けると、該当のキーに飛びます。`(規定)`の`REG_SZ`の`値のデータ`に`Registory setting`の`REG_SZ`をコピーして貼り付けます。
 
 ![imange](https://rynan4818.github.io/bs-mapdown-assistant_registry.png)
+
+6. 最後に`bs-mapdown-assistant setting`の`OK`を押すと、`bs-mapdown-assistant.rb`の設定値を変更して保存し完了です。
 
 BeatSaverから譜面情報の取得にcurlコマンドを使いますが、Windows 10 April 2018 Update から curl が標準コマンドとして追加された様なので同梱していません。
 curlコマンドが実行できない場合は、以下からダウンロードして bs-mapdown-assistant.exe と一緒のフォルダに置いて下さい。
@@ -51,6 +49,13 @@ bs-mapdown-assistant.exe に内包している具体的なライブラリファ�
 - 製作者:arton
 - ライセンス：Ruby Licence
 
+## GUIフォームビルダー入手先
+- FormDesigner for Project VisualuRuby Ver 060501
+- https://ja.osdn.net/projects/fdvr/
+- Subversion リポジトリ r71(r65以降)の/formdesigner/trunk を使用
+- 開発者:雪見酒
+- ライセンス：Ruby Licence
+
 ## 使用拡張ライブラリ、ソースコード
 
 ### Ruby本体 1.8.7-p330              #開発はActiveScriptRuby(1.8.7-p330)を使用
@@ -65,6 +70,11 @@ bs-mapdown-assistant.exe に内包している具体的なライブラリファ�
 
 ### gem                              #開発はActiveScriptRuby(1.8.7-p330)同封版を使用
 - https://rubygems.org/
+- ライセンス：Ruby Licence
+
+### VisualuRuby                      #開発はActiveScriptRuby(1.8.7-p330)同封版を使用 ※swin.soを改造
+- http://www.osk.3web.ne.jp/~nyasu/software/vrproject.html
+- 開発者:にゃす
 - ライセンス：Ruby Licence
 
 ### json-1.4.6-x86-mswin32
