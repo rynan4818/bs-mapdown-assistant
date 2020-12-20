@@ -7,6 +7,8 @@ BeatSaverからOneClickでダウンロードする時にModAssistantの間に入
 レジストリの修正方法はご自分で調べて下さい。
 分からない方は危険なので止めておいて下さい。
 
+**2020/12/20 BeatSaverの仕様変更で使えなくなっています。使用中の方はアンインストール方法で機能を削除して下さい**
+
 # インストール方法
 1. [リリースページ](https://github.com/rynan4818/bs-mapdown-assistant/releases)から最新のリリースをダウンロードします。または、Gitでクローンもしくは、`Code`から`Downlaod ZIP`しても構いません。
 
@@ -27,6 +29,11 @@ BeatSaverから譜面情報の取得にcurlコマンドを使いますが、Wind
 curlコマンドが実行できない場合は、以下からダウンロードして bs-mapdown-assistant.exe と一緒のフォルダに置いて下さい。
 
 - https://curl.haxx.se/windows/
+
+# アンインストール方法
+
+ModAssistantのOptionsのENABLE OneClick Installs のBeatSaverのチェックをOFF後にした後、再度ONするとレジストリが元の状態に戻ります。
+あとは、インストールしたフォルダごと削除すればアンインストールできます。
 
 # ライセンスと著作権について
 
