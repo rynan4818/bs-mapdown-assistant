@@ -28,6 +28,11 @@ curlコマンドが実行できない場合は、以下からダウンロード�
 
 - https://curl.haxx.se/windows/
 
+# アンインストール方法
+
+ModAssistantのOptionsのENABLE OneClick Installs のBeatSaverのチェックをOFF後にした後、再度ONするとレジストリが元の状態に戻ります。
+あとは、インストールしたフォルダごと削除すればアンインストールできます。
+
 # ライセンスと著作権について
 
 bs-mapdown-assistant はプログラム本体と各種ライブラリから構成されています。
