@@ -89,3 +89,13 @@ bs-mapdown-assistant.exe に内包している具体的なライブラリファ�
 - https://www.gnu.org/software/libiconv/
 - Copyright (C) 1998, 2019 Free Software Foundation, Inc.
 - ライセンス：LGPL
+
+#### BeatSaverSharp
+- https://github.com/lolPants/BeatSaverSharp
+- Copyright (c) 2019 Jack Baron DEV
+- ライセンス：MIT License
+
+#### Newtonsoft.Json
+- https://www.newtonsoft.com/json
+- Copyright (c) 2007 James Newton-King
+- ライセンス：MIT License

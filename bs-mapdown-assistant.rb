@@ -13,8 +13,7 @@ require 'win32ole'
 require 'json'
 
 #íËêî
-CURL_TIMEOUT             = 10
-BEATSAVER_KEY_DETAIL_URL = "https://beatsaver.com/api/maps/detail/"
+HTTP_TIMEOUT             = 10
 PLAYLIST_FILE            = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Beat Saber\\Playlists\\TestPlayList.bplist"
 MOD_ASSISTANT            = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Beat Saber\\ModAssistant.exe"
 
@@ -24,7 +23,7 @@ key = $1
 
 #beatsaver èÓïÒéÊìæ
 begin
-  beatsaver_data = JSON.parse(`curl.exe --connect-timeout #{CURL_TIMEOUT} #{BEATSAVER_KEY_DETAIL_URL}#{key}`)
+  beatsaver_data = JSON.parse(`BeatSaverAPI.exe #{key} #{HTTP_TIMEOUT}`)
   songName = beatsaver_data['metadata']['songName']
   hash     = beatsaver_data['hash'].upcase
 rescue
@@ -46,9 +45,11 @@ else
   playlist['songs'] = []
 end
 song_add = true
-playlist['songs'].each do |song_data|
+updete_idx = nil
+playlist['songs'].each_with_index do |song_data,idx|
   if song_data['hash'].upcase == hash
     song_add = false
+    updete_idx = idx
     break
   end
 end
@@ -59,10 +60,14 @@ if song_add
   song_add_data['key'] = key
   song_add_data['hash'] = hash
   playlist['songs'].push song_add_data
-  File.open(PLAYLIST_FILE,'w') do |file|
-    JSON.pretty_generate(playlist).each do |line|
-      file.puts line
-    end
+else
+  update_songs = playlist['songs'][updete_idx]
+  playlist['songs'][updete_idx,1] = []
+  playlist['songs'].push update_songs
+end
+File.open(PLAYLIST_FILE,'w') do |file|
+  JSON.pretty_generate(playlist).each do |line|
+    file.puts line
   end
 end
 
