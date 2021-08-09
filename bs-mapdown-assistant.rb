@@ -13,7 +13,8 @@ require 'win32ole'
 require 'json'
 
 #定数
-HTTP_TIMEOUT             = 10
+CURL_TIMEOUT             = 10
+BEATSAVER_API_KEY_URL = "https://beatsaver.com/api/maps/id/"
 PLAYLIST_FILE            = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Beat Saber\\Playlists\\TestPlayList.bplist"
 MOD_ASSISTANT            = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Beat Saber\\ModAssistant.exe"
 
@@ -22,52 +23,56 @@ ARGV[1] =~ /\/([0-9a-f]+)\//i
 key = $1
 
 #beatsaver 情報取得
+hash = nil
 begin
-  beatsaver_data = JSON.parse(`BeatSaverAPI.exe #{key} #{HTTP_TIMEOUT}`)
+  beatsaver_data = JSON.parse(`curl.exe --connect-timeout #{CURL_TIMEOUT} #{BEATSAVER_API_KEY_URL}#{key}`)
   songName = beatsaver_data['metadata']['songName']
-  hash     = beatsaver_data['hash'].upcase
+  last_version     = beatsaver_data['versions'].last
+  hash = last_version['hash'].upcase if last_version
 rescue
-  puts "BeatSaber ERROR"
-  puts "Press enter to finish."
-  STDIN.gets
-  exit
+  puts "BeatSaber ERROR."
+  puts "Download without adding to the playlist."
+  sleep 1.5
 end
 
-#プレイリスト更新
-if File.exist?(PLAYLIST_FILE)
-  playlist = JSON.parse(File.read(PLAYLIST_FILE))
-else
-  playlist = {}
-  playlist['playlistTitle'] = "bs-mapdown-assistant"
-  playlist['playlistDescription'] = ""
-  playlist['playlistAuthor'] = ""
-  playlist['image'] = '1'
-  playlist['songs'] = []
-end
-song_add = true
-updete_idx = nil
-playlist['songs'].each_with_index do |song_data,idx|
-  if song_data['hash'].upcase == hash
-    song_add = false
-    updete_idx = idx
-    break
+if hash
+  #プレイリスト更新
+  if File.exist?(PLAYLIST_FILE)
+    playlist = JSON.parse(File.read(PLAYLIST_FILE))
+  else
+    playlist = {}
+    playlist['playlistTitle'] = "bs-mapdown-assistant"
+    playlist['playlistDescription'] = ""
+    playlist['playlistAuthor'] = ""
+    playlist['image'] = '1'
+    playlist['songs'] = []
   end
-end
-if song_add
-  puts "Added \"#{songName}\" to PlayList \"#{playlist['playlistTitle']}\""
-  song_add_data = {}
-  song_add_data['songName'] = songName
-  song_add_data['key'] = key
-  song_add_data['hash'] = hash
-  playlist['songs'].push song_add_data
-else
-  update_songs = playlist['songs'][updete_idx]
-  playlist['songs'][updete_idx,1] = []
-  playlist['songs'].push update_songs
-end
-File.open(PLAYLIST_FILE,'w') do |file|
-  JSON.pretty_generate(playlist).each do |line|
-    file.puts line
+  song_add = true
+  updete_idx = nil
+  playlist['songs'].each_with_index do |song_data,idx|
+    if song_data['hash'].upcase == hash
+      song_add = false
+      updete_idx = idx
+      break
+    end
+  end
+  if song_add
+    puts "Added \"#{songName}\" to PlayList \"#{playlist['playlistTitle']}\""
+    sleep 0.8
+    song_add_data = {}
+    song_add_data['songName'] = songName
+    song_add_data['key'] = key
+    song_add_data['hash'] = hash
+    playlist['songs'].push song_add_data
+  else
+    update_songs = playlist['songs'][updete_idx]
+    playlist['songs'][updete_idx,1] = []
+    playlist['songs'].push update_songs
+  end
+  File.open(PLAYLIST_FILE,'w') do |file|
+    JSON.pretty_generate(playlist).each do |line|
+      file.puts line
+    end
   end
 end
 
