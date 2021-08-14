@@ -17,25 +17,25 @@ require 'date'
 CURL_TIMEOUT             = 10
 BEATSAVER_API_KEY_URL = "https://beatsaver.com/api/maps/id/"
 PLAYLIST_FILE            = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Beat Saber\\Playlists\\TestPlayList.bplist"
+WIP_PLAYLIST_FILE        = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Beat Saber\\Playlists\\WipTestPlayList.bplist"
 MOD_ASSISTANT            = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Beat Saber\\ModAssistant.exe"
 
 #beatsaver key取得
 ARGV[1] =~ /\/([0-9a-f]+)\//i
 key = $1
+wip_flag = false
 
 #beatsaver 情報取得
 begin
   beatsaver_data = JSON.parse(`curl.exe --connect-timeout #{CURL_TIMEOUT} #{BEATSAVER_API_KEY_URL}#{key}`)
   songName = beatsaver_data['metadata']['songName']
   versions = beatsaver_data['versions']
-  case versions.size
-  when 0
+  if versions.size == 0
     hash = nil
-  when 1
-    hash = versions[0]['hash'].upcase
   else
     sort_versions = versions.sort {|a, b| DateTime.parse(b['createdAt']) <=> DateTime.parse(a['createdAt'])}
     hash = sort_versions[0]['hash'].upcase
+    wip_flag = true unless sort_versions[0]['state'] == 'Published'
   end
 rescue
   puts "BeatSaber ERROR."
@@ -45,11 +45,20 @@ end
 
 if hash
   #プレイリスト更新
-  if File.exist?(PLAYLIST_FILE)
-    playlist = JSON.parse(File.read(PLAYLIST_FILE))
+  if wip_flag
+    playlist_file = WIP_PLAYLIST_FILE
+  else
+    playlist_file = PLAYLIST_FILE
+  end
+  if File.exist?(playlist_file)
+    playlist = JSON.parse(File.read(playlist_file))
   else
     playlist = {}
-    playlist['playlistTitle'] = "bs-mapdown-assistant"
+    if wip_flag
+      playlist['playlistTitle'] = "WIP-bs-mapdown-assistant"
+    else
+      playlist['playlistTitle'] = "bs-mapdown-assistant"
+    end
     playlist['playlistDescription'] = ""
     playlist['playlistAuthor'] = ""
     playlist['image'] = '1'
@@ -77,7 +86,7 @@ if hash
     playlist['songs'][updete_idx,1] = []
     playlist['songs'].push update_songs
   end
-  File.open(PLAYLIST_FILE,'w') do |file|
+  File.open(playlist_file,'w') do |file|
     JSON.pretty_generate(playlist).each do |line|
       file.puts line
     end

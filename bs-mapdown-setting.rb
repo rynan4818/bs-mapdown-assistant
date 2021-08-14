@@ -53,6 +53,16 @@ class Form_main                                                     ##__BY_FDVR
           end
           line = "#PLAYLIST_FILE#"
         end
+        if defined?(WIP_PLAYLIST_FILE) == nil && line.strip =~ /^WIP_PLAYLIST_FILE\s*=\s*.+$/
+          begin
+            eval line
+          rescue SyntaxError    #SyntaxError‚Ìrescue‚ÍƒNƒ‰ƒXŽw’è‚µ‚È‚¢‚ÆŽæ“¾‚Å‚«‚È‚¢
+            messageBox("Syntax Errorr\n#{line}","WIP_PLAYLIST_FILE Setting Syntax ERROR",48)
+          rescue => e
+            messageBox("#{e.inspect}\r\n#{line}","WIP_PLAYLIST_FILE Setting ERROR",48)
+          end
+          line = "#WIP_PLAYLIST_FILE#"
+        end
         if defined?(MOD_ASSISTANT) == nil && line.strip =~ /^MOD_ASSISTANT\s*=\s*.+$/
           begin
             eval line
@@ -67,6 +77,7 @@ class Form_main                                                     ##__BY_FDVR
       end
     end
     @edit_playlist.text = PLAYLIST_FILE if defined? PLAYLIST_FILE
+    @edit_wip_playlist.text = WIP_PLAYLIST_FILE if defined? WIP_PLAYLIST_FILE
     @edit_modassistant.text = MOD_ASSISTANT if defined? MOD_ASSISTANT
     @edit_registry_path.text = 'HKEY_CLASSES_ROOT\beatsaver\shell\open\command'
     @edit_registry_reg_sz.text = %Q!"#{EXE_DIR}bs-mapdown-assistant.exe" "--install" "%1"!
@@ -75,6 +86,12 @@ class Form_main                                                     ##__BY_FDVR
   def button_playlist_clicked
     if result = open_file("PlayList Select",[["PlayList File (*.bplist)","*.bplist"],["All File (*.*)","*.*"]],"*.bplist",@edit_playlist.text,'MapDown_PlayList.bplist')
       @edit_playlist.text = result
+    end
+  end
+
+  def button_wip_playlist_clicked
+    if result = open_file("WIP PlayList Select",[["PlayList File (*.bplist)","*.bplist"],["All File (*.*)","*.*"]],"*.bplist",@edit_wip_playlist.text,'MapDown_WIP_PlayList.bplist')
+      @edit_wip_playlist.text = result
     end
   end
 
@@ -106,6 +123,8 @@ class Form_main                                                     ##__BY_FDVR
         case org
         when "#PLAYLIST_FILE#"
           source_file.puts %Q!PLAYLIST_FILE            = "#{@edit_playlist.text.gsub(/\\/,'\\\\\\\\')}"!
+        when "#WIP_PLAYLIST_FILE#"
+          source_file.puts %Q!WIP_PLAYLIST_FILE        = "#{@edit_wip_playlist.text.gsub(/\\/,'\\\\\\\\')}"!
         when "#MOD_ASSISTANT#"
           source_file.puts %Q!MOD_ASSISTANT            = "#{@edit_modassistant.text.gsub(/\\/,'\\\\\\\\')}"!
         else
