@@ -11,6 +11,7 @@ EXE_DIR = (File.dirname(File.expand_path($0)).sub(/\/$/,'') + '/').gsub(/\//,'\\
 
 require 'win32ole'
 require 'json'
+require 'date'
 
 #’è”
 CURL_TIMEOUT             = 10
@@ -23,12 +24,19 @@ ARGV[1] =~ /\/([0-9a-f]+)\//i
 key = $1
 
 #beatsaver î•ñæ“¾
-hash = nil
 begin
   beatsaver_data = JSON.parse(`curl.exe --connect-timeout #{CURL_TIMEOUT} #{BEATSAVER_API_KEY_URL}#{key}`)
   songName = beatsaver_data['metadata']['songName']
-  last_version     = beatsaver_data['versions'].last
-  hash = last_version['hash'].upcase if last_version
+  versions = beatsaver_data['versions']
+  case versions.size
+  when 0
+    hash = nil
+  when 1
+    hash = versions[0]['hash'].upcase
+  else
+    sort_versions = versions.sort {|a, b| DateTime.parse(b['createdAt']) <=> DateTime.parse(a['createdAt'])}
+    hash = sort_versions[0]['hash'].upcase
+  end
 rescue
   puts "BeatSaber ERROR."
   puts "Download without adding to the playlist."
