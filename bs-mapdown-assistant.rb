@@ -19,6 +19,7 @@ BEATSAVER_API_KEY_URL = "https://beatsaver.com/api/maps/id/"
 PLAYLIST_FILE            = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Beat Saber\\Playlists\\TestPlayList.bplist"
 WIP_PLAYLIST_FILE        = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Beat Saber\\Playlists\\WipTestPlayList.bplist"
 MOD_ASSISTANT            = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Beat Saber\\ModAssistant.exe"
+UNSHIFT                  = false
 
 #beatsaver keyŽæ“¾
 ARGV[1] =~ /\/([0-9a-f]+)\//i
@@ -80,11 +81,19 @@ if hash
     song_add_data['songName'] = songName
     song_add_data['key'] = key
     song_add_data['hash'] = hash
-    playlist['songs'].push song_add_data
+    if UNSHIFT
+      playlist['songs'].unshift song_add_data
+    else
+      playlist['songs'].push song_add_data
+    end
   else
     update_songs = playlist['songs'][updete_idx]
     playlist['songs'][updete_idx,1] = []
-    playlist['songs'].push update_songs
+    if UNSHIFT
+      playlist['songs'].unshift update_songs
+    else
+      playlist['songs'].push update_songs
+    end
   end
   File.open(playlist_file,'w') do |file|
     JSON.pretty_generate(playlist).each do |line|
