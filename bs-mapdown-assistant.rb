@@ -15,7 +15,7 @@ require 'date'
 
 #íËêî
 CURL_TIMEOUT             = 10
-BEATSAVER_API_KEY_URL = "https://beatsaver.com/api/maps/id/"
+BEATSAVER_API_KEY_URL = "https://api.beatsaver.com/maps/id/"
 PLAYLIST_FILE            = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Beat Saber\\Playlists\\TestPlayList.bplist"
 WIP_PLAYLIST_FILE        = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Beat Saber\\Playlists\\WipTestPlayList.bplist"
 MOD_ASSISTANT            = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Beat Saber\\ModAssistant.exe"
